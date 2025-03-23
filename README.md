@@ -71,4 +71,54 @@ print(grade(85))  # Output: B
 df['result'] = df['score'].apply(lambda x: 'Pass' if x >= 60 else 'Fail')
 ```
 
+## Help 
+- Pandas Show Versions `pd.show_versions()`
+- Version and Library information  `pd.show_versions()`
+- Creating Data Frames 
+```
+data = {'animal': ['cat', 'cat', 'snake', 'dog', 'dog', 'cat', 'snake', 'cat', 'dog', 'dog'],
+        'age': [2.5, 3, 0.5, np.nan, 5, 2, 4.5, np.nan, 7, 3],
+        'visits': [1, 3, 2, 3, 2, 3, 1, 1, 2, 1],
+        'priority': ['yes', 'yes', 'no', 'yes', 'no', 'no', 'no', 'yes', 'no', 'no']}
 
+labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+df = pd.DataFrame(data,index=labels)
+print(df)
+
+```
+- Information on data frames `df.info()`, `df.describe()` or `df.head()`
+- Info on functions  `pd.DataFrame.drop.__doc__`
+- Note: Numpy has no loc or iloc
+- Get Specific rows `df.iloc[:3]`
+- Get specific columns `df.loc[:, ['animal', 'age']]` or `df[['animal', 'age']]`
+- More on getting specific data: `df.loc[df.index[[3, 4, 8]]['animal', 'age']]` or `df[['animal','age']].iloc[[3,4,8]]`
+- Specific Rows based on conditions
+  - `df[df['visits'] > 3]`
+  - `df[df['age'].isnull()]`
+  - `df[df['age'].isnull()]` or `df[df['age'].isna()]`
+  - `df[(df['animal']=='cat') & (df['age']<3)]` or `df[df['age'].between(2, 4)]`
+  - `df['animal'] = df['animal'].replace('snake', 'python')`
+  
+- Changing Values
+  -  `df.loc['f', 'age'] = 1.5`
+  -  `df['priority2'] = df['priority'] =='yes'`
+- Summaries
+  - `df['visits'].sum()`
+  - `df.groupby('animal')['age'].mean()`
+  - `df['animal'].value_counts()`
+- Appending `df.loc['k'] = [5.5, 'dog', 'no', 2]`, `df.loc[len(df)] = [5, 6]` or `df = pd.concat([df, new_row], ignore_index=True)`
+- Deleting `df = df.drop('k')` or `df.drop(['priority'],axis=1,inplace=True)`
+- Sorting `df.sort_values(['age','visits'],ascending=[0,1])` Ascending is 1
+- Renaming `df.rename({'priority2':'priority'},axis=1)`
+- Pivot Tables `dfNew= df.pivot_table(index='animal', columns='visits',values='age',aggfunc='mean')`
+
+# Advanced Functions 
+- 
+
+
+
+
+
+
+`
