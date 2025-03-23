@@ -159,7 +159,70 @@ print(df)
   - `bios[bios['name'].str.contains("Keith|Patric",case=False)` using regular expressions
   -  Is In `bios[(bios['born_country'].isin(["USA","FRA","GBR"]))& (bios['name'].str.startswith("La"))`
   -  Queries `bios.query("born_country =='USA' and born_city == 'Seattle'")`
-  - Modifications 
-  - `coffee['New_Price'] = np.where(coffee['Coffee Type'] == 'Espresso', 10,20 )`
-  - Deleting Rows using Index `coffee.drop(0)`
-  - Deletiing Columns `coffee.drop(columns='Price',inplace=True)`
+- Modifications 
+    - Add data Using Where`coffee['New_Price'] = np.where(coffee['Coffee Type'] == 'Espresso', 10,20 )`
+    - More Ways to add `bios_new["first_name"] = bios_new['name'].str.split(' ').str[0]` and `bios_new['height_category'] = \
+      bios['height_cm'].apply(lambda x: 'Kota' if x <165 else 'Samanya' if x < 185 else 'Diga' )`
+    - Using Advanced Functions
+  ```
+        def categorize_athlete(row):
+            if row['height_cm']< 175 and row['weight_kg']<70 :
+                return 'Leight Weight'
+            elif row['height_cm']< 185 and row['weight_kg']<=80 :
+                return 'Middle Weight'
+            else:
+                return 'Heavy Weight'
+
+        # Make sure to add the axis as 1 - In this case take in rows 
+        bios_new['Category'] = bios_new.apply(categorize_athlete, axis=1)
+  ``` 
+      
+    - Add constant value for all values `coffeeX['LK']= 5`
+    - Deleting Rows using Index `coffee.drop(0)`
+    - Deletiing Columns `coffee.drop(columns='Price',inplace=True)`
+    - Rename Columns `coffeeY.rename(columns={'LK':'Price'},inplace=True)`
+    - Copying `coffeeY = coffeeX.copy()`  Dont just use the =
+    - Convert to Date time `bios_new["born_date"] = pd.to_datetime(bios_new['born_date'],errors='coerce')`
+ 
+- Merge and Concat 
+  - Key Wise `bios_new = pd.merge(bios,nocs, left_on='born_country', right_on='NOC', how='left',suffixes=["A","B"])`
+      - Left Keep all on the left.
+      - Right Keep all on the right.
+      - Outher on Keep all
+      - Inner on Keep only common 
+
+  - Concat - Just make one from two `concat_df = pd.concat([usa,gbr])`
+      - On concat - axis 1 stack rows 
+      - On concat - axis 0 ctack columns
+   
+- Handling Nans
+  - filling `coffee.fillna(100, inplace=True)`
+  - Interpolating `coffee['Units Sold']  =  coffee['Units Sold'].interpolate()`
+  - Dropping: `coffee.dropna(inplace=True)` or `coffee.dropna(subset = ['Units Sold'], inplace=True)`
+  - Checking: `coffee[coffee['Units Sold'].isna()]` or `coffee[coffee['Units Sold'].notna()]`
+ 
+- Grouping
+  - `coffee.groupby(['Coffee Type']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})`
+  - `coffee.groupby(['Coffee Type','Day']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})`
+ 
+   Others
+  - Pivoting `coffee.pivot(columns='Coffee Type', index='Day',values='revenue')` and ` pd.pivot_table(df, values='Temperature', index='City', columns='Date')`
+         - Use pivot() if no duplicates and no aggregation needed.
+         - Use pivot_table() if duplicates exist or you need aggregation.
+  - Counting `bios.groupby([bios['birth_year'],bios['birth_month']])['name'].count().reset_index().sort_values('name',ascending=False).head(30))`
+  - Ranking `bios['height_rank'] = bios['height_cm'].rank()`
+  - Cumilative Summing `coffee['cumilitive_revenue'] = coffee['revenue'].cumsum()` and `coffee['revenue'].rolling(3).sum()`
+  - Or Statement ` bios[(bios['born_region'] == 'New Hampshire') | (bios['born_city'] == 'San Francisco')]`
+ 
+- Plotting
+```
+import matplotlib.pyplot as plt
+# Plotting histogram of heights
+plt.figure(figsize=(10, 6))
+plt.hist(bios['height_cm'].dropna(), bins=30, log=True, edgecolor='black')
+plt.title('Histogram of Heights')
+plt.xlabel('Height (cm)')
+plt.ylabel('Frequency (log scale)')
+plt.grid(True)
+plt.show()
+```
