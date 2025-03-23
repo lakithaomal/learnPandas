@@ -85,7 +85,7 @@ labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
 df = pd.DataFrame(data,index=labels)
 print(df)
-
+s = pd.Series([1, 3, 5, np.nan, 6, 8])
 ```
 - Information on data frames `df.info()`, `df.describe()` or `df.head()`
 - Info on functions  `pd.DataFrame.drop.__doc__`
@@ -225,4 +225,24 @@ plt.xlabel('Height (cm)')
 plt.ylabel('Frequency (log scale)')
 plt.grid(True)
 plt.show()
+```
+
+- Some more examples 
+Adding Rows: `df.loc['k'] = [5.5, 'dog', 'no', 2]`
+Droping Rows: `df = df.drop('k')`
+Counting Each Value `df['animal'].value_counts()`
+MaxMin Indexes and Labels: `print(df.idxmax(axis=1))   # Output: labels of max per row
+print(df.values.argmax(axis=1))  # NumPy: position of max per row`
+Largest N :`dF.nlargest(3)`
+Shifting: `.shift()`
+Convert to Numpy :`df.to_numpy()`
+Aggregate and Transform `df.agg(lambda x: np.mean(x) * 5.6)` and `df.transform(lambda x: x * 101.2)`
+String Methods: `s.str.lower()`
+Time Series
+```
+rng = pd.date_range("1/1/2012", periods=100, freq="s")
+
+ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
+
+ts.resample("5Min").sum()
 ```
