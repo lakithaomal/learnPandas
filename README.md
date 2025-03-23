@@ -153,4 +153,13 @@ print(df)
     print(row['Units Sold'])
     print()
   ```
-- 
+- Filtering
+  - `bios.loc[bios['height_cm']>215,['name','born_country','height_cm']]` very useful when filtering both rows and columns 
+  - `bios[(bios['height_cm']>210) & (bios['born_country'] == 'USA')]`
+  - `bios[bios['name'].str.contains("Keith|Patric",case=False)` using regular expressions
+  -  Is In `bios[(bios['born_country'].isin(["USA","FRA","GBR"]))& (bios['name'].str.startswith("La"))`
+  -  Queries `bios.query("born_country =='USA' and born_city == 'Seattle'")`
+  - Modifications 
+  - `coffee['New_Price'] = np.where(coffee['Coffee Type'] == 'Espresso', 10,20 )`
+  - Deleting Rows using Index `coffee.drop(0)`
+  - Deletiing Columns `coffee.drop(columns='Price',inplace=True)`
