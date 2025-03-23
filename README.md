@@ -139,4 +139,18 @@ print(df)
 
 ## Quick Tips
 - Use `.loc` when you know **row/column names**.
+- Getting Cells using at `coffee.at[1,"Day"]` Label based
+- Getting Cells using iat `coffee.iat[1,1]` : Index based  
 
+- Assigning Values `coffee.loc[1:4,"Units Sold"] = 100` using Label Based
+
+# Helpful 
+- Sorting Values: `coffee.sort_values(["Units Sold","Coffee Type"],ascending=[0,1]).head()`
+- For Loops for Data Frams
+  ```
+  for index, row in coffee.iterrows():
+    print(index)
+    print(row['Units Sold'])
+    print()
+  ```
+- 
