@@ -113,12 +113,30 @@ print(df)
 - Renaming `df.rename({'priority2':'priority'},axis=1)`
 - Pivot Tables `dfNew= df.pivot_table(index='animal', columns='visits',values='age',aggfunc='mean')`
 
-# Advanced Functions 
-- 
+# Additional Summary from exercises 
+- Creating an Array `df_a = pd.DataFrame([[1,2,3],[3,4,5],[7,8,9],[1,2,3],[3,4,5],[7,8,9],[1,2,3],[3,4,5],[7,8,9],[1,2,3],[3,4,5],[7,8,9]], columns=["A","B","C"]) # Sytax is very close to  numpy `
+- Summarizing DataFrames: `df.head()`, `df.tail()`, `df.index`: gives a Range object, `df.columns`: gives a Index object,`df_a.info()` Columns, Non Null Count and Dtype, `df.descibe()` min,max, std, mean, count and quantiles for each column , `df_a.nunique()` unique values per given column and `df.shape` gives the shape for the data frame.
+- Different ways to read data
+  - `results = pd.read_parquet('../data/complete/results.parquet')`
+  - `olympics_data = pd.read_excel('../data/complete/olympics-data.xlsx')`
+  - `bios = pd.read_csv('../data/complete/bios.csv')` 
+- Randomly show variables `coffee.sample(10)`
+- Access Data
+  - `coffee.loc[0]`: Get the index valued '0'
+  -  Multiple indexes named with a list `coffee.loc[[0,3,4,4]]`
+  -  Slicing: Label-based indexing (loc): `coffee.loc[2:4,["Day","Coffee Type"]])` All inclusive - just picks them - If the indexes are not numbers will not work - 
+  - Integer-based indexing (iloc): `coffee.iloc[2:4,1:3]` Upper end not inclusive like numpy
+# Summary of `.loc` and `.iloc` in Pandas
 
+| Feature       | `.loc`                                         | `.iloc`                                        |
+|---------------|-----------------------------------------------|------------------------------------------------|
+| Index Type    | Label-based indexing                          | Integer-based indexing                         |
+| Usage         | `df.loc[row_label, column_label]`             | `df.iloc[row_position, column_position]`       |
+| Includes      | The stop label is **inclusive**               | The stop index is **exclusive**                |
+| Data Types    | Accepts labels, booleans, and slices          | Accepts integers, lists of integers, and slices|
+| Example       | `df.loc['row1', 'col1']`                      | `df.iloc[0, 0]`                                |
+| Multiple Rows | `df.loc[['row1', 'row2']]`                    | `df.iloc[[0, 1]]`                              |
 
+## Quick Tips
+- Use `.loc` when you know **row/column names**.
 
-
-
-
-`
