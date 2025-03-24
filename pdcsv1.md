@@ -48,7 +48,8 @@ print(df)
 s = pd.Series([1, 3, 5, np.nan, 6, 8])
 ```
 - Show version: `pd.show_versions()`
-- Data info: `df.info()`, `df.describe()`, `df.head()` and  `df.tail()` default is 5 for both head and tail 
+- Data info: `df.info()`, `df.describe()`, `df.head()` and  `df.tail()` default is 5 for both head and tail
+- 
 ## Accessing and Slicing Data
 ### Rows and Columns
 ```python
@@ -213,3 +214,68 @@ rng = pd.date_range("1/1/2012", periods=100, freq="s")
 ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
 ts.resample("5Min").sum()
 ```
+## Duplicates 
+
+``` python
+df = pd.DataFrame({
+    'A': [1, 2, 2, 4],
+    'B': [5, 6, 6, 8]
+})
+print( df.duplicated())
+# 0    False
+# 1    False
+# 2     True
+# 3    False
+df.drop_duplicates() # Drops the duplicates 
+```
+
+## Plotting data frames 
+
+# Explanation of `df.plot()`
+
+The `df.plot()` function is a convenient way to plot data directly from a pandas DataFrame. It uses matplotlib under the hood.
+
+## Syntax
+```python
+df.plot(x=None, y=None, kind='line', ...)
+```
+
+### Common Parameters:
+- `x`: Column label to use for the x-axis.
+- `y`: Column label or list of labels to use for the y-axis.
+- `kind`: Type of plot ('line', 'bar', 'barh', 'hist', 'box', 'kde', 'area', 'scatter', 'pie'). Default is 'line'.
+- `title`: Title of the plot.
+- `xlabel`, `ylabel`: Labels for the x-axis and y-axis.
+- `figsize`: Tuple representing the figure size.
+- `grid`: Boolean to show/hide grid.
+
+## Example
+Here’s an example with a plot:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {
+    'Date': pd.date_range(start='2025-01-01', periods=5, freq='D'),
+    'Sales': [250, 300, 280, 310, 270],
+    'Profit': [60, 70, 65, 75, 68]
+}
+df = pd.DataFrame(data)
+df.set_index('Date', inplace=True)
+
+df.plot(title='Sales and Profit Over Time')
+plt.xlabel("Date")
+plt.ylabel("Amount")
+plt.tight_layout()
+plt.show()
+```
+
+![Plot Example](/mnt/data/df_plot_example.png)
+
+## Notes
+- If the DataFrame has a datetime index, it will automatically use it for the x-axis.
+- You can customize plots further using matplotlib functions.
+
+
+
