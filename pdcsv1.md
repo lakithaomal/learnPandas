@@ -48,7 +48,7 @@ print(df)
 s = pd.Series([1, 3, 5, np.nan, 6, 8])
 ```
 - Show version: `pd.show_versions()`
-- Data info: `df.info()`, `df.describe()`, `df.head()`
+- Data info: `df.info()`, `df.describe()`, `df.head()` and  `df.tail()` default is 5 for both head and tail 
 ## Accessing and Slicing Data
 ### Rows and Columns
 ```python
