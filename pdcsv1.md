@@ -168,6 +168,8 @@ coffee[coffee['Units Sold'].isna()]
 ```python
 coffee.groupby(['Coffee Type']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})
 coffee.groupby(['Coffee Type','Day']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})
+results = latest_orders.groupby(['product_id'])['revenue'].sum()
+rs= results.sort_values(ascending= False)[:5].reset_index()
 ```
 ## Pivot and Count
 ```python
