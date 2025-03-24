@@ -96,6 +96,109 @@ df_a = pd.DataFrame([[1,2,3],[3,4,5],[7,8,9]]*4, columns=["A","B","C"])
 df.head(), df.tail(), df.index, df.columns, df.shape
 df.info(), df.describe(), df_a.nunique()
 ```
+
+# Pandas DataFrame Quick Reference
+
+## 1. `df.head(n=5)`
+Returns the **first `n` rows** of the DataFrame. Default is 5 rows.
+
+### Example
+```python
+df.head(3)
+```
+
+---
+
+## 2. `df.tail(n=5)`
+Returns the **last `n` rows** of the DataFrame. Default is 5 rows.
+
+### Example
+```python
+df.tail(2)
+```
+
+---
+
+## 3. `df.index`
+Returns the **index (row labels)** of the DataFrame.
+
+### Example
+```python
+print(df.index)  # RangeIndex(start=0, stop=10, step=1)
+```
+
+---
+
+## 4. `df.columns`
+Returns the **column labels** of the DataFrame.
+
+### Example
+```python
+print(df.columns)  # Index(['Name', 'Age', 'Salary'], dtype='object')
+```
+
+---
+
+## 5. `df.shape`
+Returns a **tuple** representing the **dimensions** of the DataFrame as `(rows, columns)`.
+
+### Example
+```python
+print(df.shape)  # (100, 5)
+```
+
+---
+
+## 6. `df.info()`
+Provides a **concise summary** of the DataFrame:
+- Number of entries (rows)
+- Column names and data types
+- Non-null counts
+- Memory usage
+
+### Example
+```python
+df.info()
+```
+
+---
+
+## 7. `df.describe()`
+Generates **summary statistics** for numerical columns:
+- Count, mean, std, min, 25%, 50%, 75%, max
+
+### Example
+```python
+df.describe()
+```
+
+---
+
+## 8. `df_a.nunique()`
+Returns the **number of unique values** in each column of DataFrame `df_a`.
+
+### Example
+```python
+df_a.nunique()
+```
+
+---
+
+## Summary Table
+
+| Function         | Description                                 |
+|------------------|---------------------------------------------|
+| `df.head()`      | First 5 rows                                |
+| `df.tail()`      | Last 5 rows                                 |
+| `df.index`       | Row labels                                   |
+| `df.columns`     | Column labels                                |
+| `df.shape`       | Dimensions (rows, columns)                  |
+| `df.info()`      | Summary of structure & data types           |
+| `df.describe()`  | Summary stats (numerical)                   |
+| `df_a.nunique()` | Unique values per column                    |
+
+
+
 ### Reading Data
 ```python
 pd.read_parquet('path.parquet')
