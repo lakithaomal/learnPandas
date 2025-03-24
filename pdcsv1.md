@@ -213,6 +213,12 @@ s.str.lower()
 rng = pd.date_range("1/1/2012", periods=100, freq="s")
 ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
 ts.resample("5Min").sum()
+
+bios['birth_date']  = pd.to_datetime(bios['born_date'])
+bios['birth_year']  = bios['birth_date'].dt.year
+bios['birth_month'] = bios['birth_date'].dt.month
+print(bios.groupby(bios['birth_date'].dt.year).count())
+
 ```
 ## Duplicates 
 
