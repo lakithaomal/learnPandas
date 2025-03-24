@@ -1,71 +1,62 @@
-# Pandas Quick Reference Guide
+# Learn Pandas: Comprehensive Reference Guide
 
-## Table of Contents
-1. [Setup](#setup)
-2. [Data Structures](#data-structures)
-3. [Lambda Functions](#lambda-functions)
-4. [Creating DataFrames](#creating-dataframes)
-5. [Accessing Data](#accessing-data)
-6. [Modifying Data](#modifying-data)
-7. [Data Summarization](#data-summarization)
-8. [Filtering Data](#filtering-data)
-9. [Merging and Concatenation](#merging-and-concatenation)
-10. [Handling Missing Data](#handling-missing-data)
-11. [Grouping and Aggregation](#grouping-and-aggregation)
-12. [Pivot Tables](#pivot-tables)
-13. [Plotting](#plotting)
-14. [Advanced Operations](#advanced-operations)
-15. [Time Series](#time-series)
+These exercises are based on this [YouTube video](https://www.youtube.com/watch?v=2uvysYbKdjM&t=17s).
 
 ---
 
-## Setup
+## Setup: Create a Custom Virtual Environment
+
 ```bash
-python3 -m venv vEnvPandas  # Create virtual environment
-source vEnvPandas/bin/activate  # Activate environment
-pip3 install -r requirements.txt  # Install dependencies
+python3 -m venv vEnvPandas      # Create virtual environment named vEnvPandas
+source vEnvPandas/bin/activate  # Activate the environment
+pip3 install -r requirements.txt  # Install dependencies from file
 ```
 
-Requirements file: [GitHub Requirements](https://github.com/KeithGalli/complete-pandas-tutorial/blob/master/requirements.txt)
+- Requirements file source: [GitHub Link](https://github.com/KeithGalli/complete-pandas-tutorial/blob/master/requirements.txt)
 
 ---
 
-## Data Structures
+## DataFrames Overview
 
-### DataFrames
-- Main structure in pandas, similar to SQL tables or Excel spreadsheets.
-- Supports row and column labels.
+- **DataFrame**: The primary data structure in pandas, similar to a 2D table.
+- Pandas also supports **Series** (1D), but not 3D directly.
 
 ---
 
-## Lambda Functions
+## Lambda Functions in Python
 
-### Syntax
+### Basic Syntax
 ```python
 lambda arguments: expression
 ```
 
-### Examples
+Example:
 ```python
-# Square a number
 square = lambda x: x * x
 print(square(4))  # Output: 16
-
-# Even/Odd check
-check = lambda x: 'Even' if x % 2 == 0 else 'Odd'
-
-# Grading
-grade = lambda x: 'A' if x >= 90 else 'B' if x >= 80 else 'C' if x >= 70 else 'F'
 ```
 
-### In Pandas
+### Lambda with `if-else` (Ternary)
+```python
+check = lambda x: 'Even' if x % 2 == 0 else 'Odd'
+print(check(5))  # Output: Odd
+```
+
+### Lambda with Multiple `if-elif-else`
+```python
+grade = lambda x: 'A' if x >= 90 else 'B' if x >= 80 else 'C' if x >= 70 else 'F'
+print(grade(85))  # Output: B
+```
+
+### Lambda in Pandas
 ```python
 df['result'] = df['score'].apply(lambda x: 'Pass' if x >= 60 else 'Fail')
 ```
 
 ---
 
-## Creating DataFrames
+## Creating DataFrames and Series
+
 ```python
 import pandas as pd
 import numpy as np
@@ -74,34 +65,36 @@ data = {'animal': ['cat', 'cat', 'snake', 'dog', 'dog', 'cat', 'snake', 'cat', '
         'age': [2.5, 3, 0.5, np.nan, 5, 2, 4.5, np.nan, 7, 3],
         'visits': [1, 3, 2, 3, 2, 3, 1, 1, 2, 1],
         'priority': ['yes', 'yes', 'no', 'yes', 'no', 'no', 'no', 'yes', 'no', 'no']}
-
 labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 df = pd.DataFrame(data, index=labels)
+print(df)
+
+s = pd.Series([1, 3, 5, np.nan, 6, 8])
 ```
+
+- Show version: `pd.show_versions()`
+- Data info: `df.info()`, `df.describe()`, `df.head()`
 
 ---
 
-## Accessing Data
+## Accessing and Slicing Data
 
 ### Rows and Columns
 ```python
 df.iloc[:3]  # First 3 rows
 df[['animal', 'age']]  # Specific columns
-df.loc[:, ['animal', 'age']]  # Equivalent
-df.loc['a']  # Row 'a'
+df.loc[:, ['animal', 'age']]  # Same as above
+df.loc[df.index[[3, 4, 8]], ['animal', 'age']]  # Specific rows and columns
 ```
 
 ### Conditions
 ```python
 df[df['visits'] > 3]
-df[df['age'].isnull()]
+df[df['age'].isnull()]  # or df[df['age'].isna()]
 df[(df['animal']=='cat') & (df['age']<3)]
 df[df['age'].between(2, 4)]
+df['animal'] = df['animal'].replace('snake', 'python')
 ```
-
----
-
-## Modifying Data
 
 ### Change Values
 ```python
@@ -109,86 +102,171 @@ df.loc['f', 'age'] = 1.5
 df['priority2'] = df['priority'] == 'yes'
 ```
 
-### Add or Delete
+### Add/Remove Rows and Columns
 ```python
-df.loc['k'] = [5.5, 'dog', 'no', 2]  # Add row
-df = df.drop('k')  # Drop row
-df.drop(['priority'], axis=1, inplace=True)  # Drop column
+df.loc['k'] = [5.5, 'dog', 'no', 2]  # Add
+df.drop('k', inplace=True)  # Delete row
+df.drop(['priority'], axis=1, inplace=True)  # Delete column
 ```
 
-### Rename and Sort
+### Sorting and Renaming
 ```python
-df.rename({'priority2': 'priority'}, axis=1)
 df.sort_values(['age','visits'], ascending=[False, True])
+df.rename({'priority2':'priority'}, axis=1)
+```
+
+### Pivot Tables
+```python
+dfNew = df.pivot_table(index='animal', columns='visits', values='age', aggfunc='mean')
 ```
 
 ---
 
-## Data Summarization
+## Additional DataFrame Operations
+
+### Create Array DataFrame
 ```python
-df.info()
-df.describe()
-df.head()
-df['visits'].sum()
-df.groupby('animal')['age'].mean()
-df['animal'].value_counts()
+df_a = pd.DataFrame([[1,2,3],[3,4,5],[7,8,9]]*4, columns=["A","B","C"])
+```
+
+### Summarizing
+```python
+df.head(), df.tail(), df.index, df.columns, df.shape
+df.info(), df.describe(), df_a.nunique()
+```
+
+### Reading Data
+```python
+pd.read_parquet('path.parquet')
+pd.read_excel('path.xlsx')
+pd.read_csv('path.csv')
+```
+
+### Random Samples
+```python
+coffee.sample(10)
+```
+
+---
+
+## Summary of `.loc` vs `.iloc`
+
+| Feature       | `.loc`                              | `.iloc`                              |
+|---------------|-------------------------------------|-------------------------------------|
+| Index Type    | Label-based                         | Integer-based                       |
+| Includes      | Stop label **inclusive**            | Stop index **exclusive**            |
+| Usage         | `df.loc[row_label, col_label]`      | `df.iloc[row_pos, col_pos]`         |
+
+- Get cell: `df.at[1, 'Day']` or `df.iat[1, 1]`
+- Assign value: `coffee.loc[1:4, 'Units Sold'] = 100`
+
+---
+
+## For Loops
+```python
+for index, row in coffee.iterrows():
+    print(index, row['Units Sold'])
 ```
 
 ---
 
 ## Filtering Data
 
-### Using Conditions
 ```python
-bios[bios['height_cm'] > 215]
+bios.loc[bios['height_cm'] > 215, ['name', 'born_country', 'height_cm']]
 bios[(bios['height_cm'] > 210) & (bios['born_country'] == 'USA')]
 bios[bios['name'].str.contains("Keith|Patric", case=False)]
-```
-
-### Using `isin()` and `query()`
-```python
-bios[bios['born_country'].isin(["USA", "FRA", "GBR"])]
-bios.query("born_country =='USA' and born_city == 'Seattle'")
+bios[bios['born_country'].isin(["USA","FRA","GBR"]) & bios['name'].str.startswith("La")]
+bios.query("born_country == 'USA' and born_city == 'Seattle'")
 ```
 
 ---
 
-## Merging and Concatenation
-```python
-# Merge
-pd.merge(bios, nocs, left_on='born_country', right_on='NOC', how='left')
+## Modify Columns
 
-# Concatenate
-pd.concat([usa, gbr])
+### Using `np.where`
+```python
+coffee['New_Price'] = np.where(coffee['Coffee Type'] == 'Espresso', 10, 20)
+```
+
+### Split and Apply
+```python
+bios_new["first_name"] = bios_new['name'].str.split(' ').str[0]
+bios_new['height_category'] = bios['height_cm'].apply(lambda x: 'Short' if x <165 else 'Medium' if x < 185 else 'Tall')
+```
+
+### Apply Function Across Rows
+```python
+def categorize_athlete(row):
+    if row['height_cm'] < 175 and row['weight_kg'] < 70:
+        return 'Light Weight'
+    elif row['height_cm'] < 185 and row['weight_kg'] <= 80:
+        return 'Middle Weight'
+    else:
+        return 'Heavy Weight'
+
+bios_new['Category'] = bios_new.apply(categorize_athlete, axis=1)
+```
+
+- Constant value: `coffeeX['LK'] = 5`
+- Deleting: `coffee.drop(0)`, `coffee.drop(columns='Price', inplace=True)`
+- Rename: `coffeeY.rename(columns={'LK':'Price'}, inplace=True)`
+- Copy: `coffeeY = coffeeX.copy()`
+- Convert date: `bios_new["born_date"] = pd.to_datetime(bios_new['born_date'], errors='coerce')`
+
+---
+
+## Merge and Concat
+
+```python
+pd.merge(bios, nocs, left_on='born_country', right_on='NOC', how='left')
+pd.concat([usa, gbr], axis=0)
 ```
 
 ---
 
 ## Handling Missing Data
+
 ```python
-df.fillna(100, inplace=True)
-df['Units Sold'].interpolate()
-df.dropna(inplace=True)
-df[df['Units Sold'].isna()]
+coffee.fillna(100, inplace=True)
+coffee['Units Sold'] = coffee['Units Sold'].interpolate()
+coffee.dropna(inplace=True)
+coffee[coffee['Units Sold'].isna()]
 ```
 
 ---
 
-## Grouping and Aggregation
+## Grouping
+
 ```python
-df.groupby('animal').agg({'age': 'mean', 'visits': 'sum'})
+coffee.groupby(['Coffee Type']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})
+coffee.groupby(['Coffee Type','Day']).agg({'Units Sold': 'sum', 'price': 'sum', 'revenue': 'sum'})
 ```
 
 ---
 
-## Pivot Tables
+## Pivot and Count
+
 ```python
-df.pivot_table(index='animal', columns='visits', values='age', aggfunc='mean')
+coffee.pivot(columns='Coffee Type', index='Day', values='revenue')
+pd.pivot_table(df, values='Temperature', index='City', columns='Date')
+bios.groupby([bios['birth_year'], bios['birth_month']])['name'].count().reset_index().sort_values('name', ascending=False).head(30)
+```
+
+---
+
+## Ranking, Cumulative Sum
+
+```python
+bios['height_rank'] = bios['height_cm'].rank()
+coffee['cumulative_revenue'] = coffee['revenue'].cumsum()
+coffee['rolling_sum'] = coffee['revenue'].rolling(3).sum()
 ```
 
 ---
 
 ## Plotting
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -203,25 +281,24 @@ plt.show()
 
 ---
 
-## Advanced Operations
+## Advanced Examples
 
-### Ranking, Cumulative Sum, and Rolling
 ```python
-df['rank'] = df['height_cm'].rank()
-df['cumulative'] = df['revenue'].cumsum()
-df['rolling_sum'] = df['revenue'].rolling(3).sum()
-```
-
-### Convert to NumPy and Aggregate
-```python
+df['animal'].value_counts()
+df.idxmax(axis=1)  # Label of max
+df.values.argmax(axis=1)  # Index of max
+df.nlargest(3, 'age')
+df.shift()
 df.to_numpy()
 df.agg(lambda x: np.mean(x) * 5.6)
 df.transform(lambda x: x * 101.2)
+s.str.lower()
 ```
 
 ---
 
 ## Time Series
+
 ```python
 rng = pd.date_range("1/1/2012", periods=100, freq="s")
 ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
