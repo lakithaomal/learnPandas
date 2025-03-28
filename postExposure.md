@@ -52,6 +52,34 @@ fb_comments_count_date_filter_grouped = fb_comments_count_date_filter \
 you group the data by user_id. reset_index() turns the user_id back into a normal column (instead of an index), making the DataFrame easier to use.
 
 
+## 📦 1. Convert `post_date` to Day of the Month
+
+```python
+facebook_posts["dayOfMonth"] = pd.to_datetime(facebook_posts["post_date"]).dt.day
+```
+
+- `pd.to_datetime()` converts the `post_date` column to datetime format.
+- `.dt.day` extracts the day of the month from the date.
+- A new column `dayOfMonth` is created in the DataFrame to store these values.
+
+---
+
+## 📊 2. Group Posts by Day and Count
+
+```python
+facebook_posts.groupby("dayOfMonth").size().reset_index(name='count')
+```
+
+- `groupby("dayOfMonth")` groups the posts by the extracted day of the month.
+- `.size()` counts the number of posts for each day.
+- `.reset_index(name='count')` transforms the result into a DataFrame and names the count column as `"count"`.
+
+This gives a summary DataFrame showing how many posts occurred on each day of the month.
+
+---
+
+✅ This type of analysis helps identify posting trends or spikes on certain days.
+
 
 
 
