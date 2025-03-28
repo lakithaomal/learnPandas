@@ -215,3 +215,15 @@ These are the **building blocks** of data analysis with pandas. Mastering these 
 
 🧠 **Next Steps**: Try these techniques on your own dataset or experiment with public datasets (like from Kaggle or UCI). Practice makes perfect!
 
+## Whats faster
+```
+Vectorized ops > itertuples() > iterrows() > iloc in loop > loc in 
+Vector Opts
+df['new_col'] = df['col1'] + df['col2']  # Vectorized and fast
+
+for row in df.itertuples():
+    print(row.Index, row.column_name)
+ ```
+
+
+
